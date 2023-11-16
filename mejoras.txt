@@ -1,0 +1,11 @@
+Accionables:
+-Usar inglés
+-Migrar todos los archivos "custom" a los generados por el CLI
+-Investigar "Template Strings" en "confirmarTurno()" en la línea 71
+-Usar Git
+-Instalar ESlint y revisar cómo midudev usa "https://github.com/standard/standard"
+
+Accionables opcionales:
+-Mejorar el diseño de la app basándose en un sistema existente
+-Revisar etiquetas semánticas de HTML
+-Profundizar un poco más en CSS nativo

@@ -1,0 +1,10 @@
+<div class="sidebar flex flex-col gap-y-6 bg-cyan-600 w-fit h-screen rounded"> 
+    <div class="flex mt-2 gap-x-1 items-stretch hover:mr-2" id="Iconos-Span" *ngFor="let icon of icons">
+      <mat-icon class="hover:cursor-pointer custom-icon" aria-hidden="false" aria-label="Example home icon" [fontIcon]="icon.icon"  [routerLink]="[icon.link]"></mat-icon>
+      <span class="hidden-text text-gray-200" [routerLink]="[icon.link]">{{icon.name}}</span>
+    </div>
+    <div class="items-stretch flex mt-auto mb-4 hover:mr-2"  id="Iconos-Span">
+      <mat-icon class="hover:cursor-pointer custom-icon" aria-hidden="false" aria-label="Example home icon" fontIcon="exit_to_app"></mat-icon>
+      <span class="hidden-text text-gray-200">Salir</span>
+    </div>
+</div>

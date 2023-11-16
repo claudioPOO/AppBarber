@@ -1,0 +1,13 @@
+#Iconos-Span:hover .hidden-text {
+    display: inline;
+    cursor: pointer;
+    
+}
+.hidden-text {
+    display: none; /* Inicialmente oculta el texto */
+}
+
+.custom-icon {
+    color: rgb(229 231 235);
+    margin-left: 4px;
+}

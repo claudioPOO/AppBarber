@@ -1,0 +1,77 @@
+<div class="w-full h-screen bg-gray-200 flex">
+  <sidebar></sidebar> 
+  <!-- header -->
+  <div class="w-full h-screen flex flex-col">
+      <!-- Dato de usuario -->
+    <div class="flex gap-x-4 flex-wrap ml-4 w-fit mt-2 border-b border-black hover:shadow-2xl shadow-cyan-900">
+      <label class="text-2xl font-serif text-cyan-900">Bienvenido {{cliente.nombre}} {{cliente.apellido}} </label>
+    </div>
+      <!-- Elegir Barbero -->
+    <div class="mt-8 ml-4 w-fit" *ngIf="!barbero_seleccionado;else calendario">
+      <h3 class=" text-xl font-serif text-cyan-900">Elegir Barbero</h3>
+      <div class="flex flex-wrap mr-4 rounded bg-slate-100 w-fit h-fit p-4 gap-4">
+        <div class="w-fit flex items-center flex-col p-2 hover:scale-110 cursor-pointer active:scale-110 transform transition duration-150  border-x border-cyan-600" *ngFor="let barbero of barberos"  (click)="verCalendario(barbero.id)" >
+          <img class="rounded-full h-32 w-32 object-cover border-4 border-white mb-4 " [src]="barbero.img" alt="Imagen_Peluquero">
+          <div class="text-center">
+            <p class="text-lg font-serif font-semibold text-cyan-800 mb-2">{{barbero.name}} {{barbero.lastname}}</p>
+            <p class="text-md font-serif text-cyan-800">{{barbero.phone}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Calendario para seleccionar dia -->
+  <ng-template #calendario>
+    <div class="flex flex-col w-full h-screen mt-8 px-4">
+      <div class="flex gap-x-2  w-full h-60">
+        <div class="w-fit h-60 flex items-center flex-col p-2  border-x border-cyan-600">
+          <img class="rounded-full h-32 w-32 object-cover border-4 border-white mb-4 " [src]="barbero.img" alt="Imagen_Peluquero">
+          <div class="text-center">
+            <p class="text-lg font-serif font-semibold text-cyan-800 mb-2">{{barbero.nombre}} {{barbero.apellido}}</p>
+            <p class="text-md font-serif text-cyan-800">{{barbero.celular}}</p>
+          </div>
+        </div>
+        <div class="bg-slate-100 rounded-lg h-60 w-1/2 overflow-auto">
+          <div class="grid grid-cols-6 row-start-1 w-full h-fit mb-4">
+            <div class="text-xl font-serif h-fit text-cyan-800 p-4 w-fit h-fit" *ngFor="let dia of dias_semana">{{dia}}</div>
+          </div>
+          <div class="grid grid-cols-6 w-full">
+            <ng-container  *ngFor="let dia of diasDelMes;let i = index">
+              <div class="grid col-start-1 text-xl ml-4 font-serif text-cyan-800 hover:cursor-pointer hover:bg-slate-200 hover:rounded-lg" *ngIf="dia.dia_num === 1" (click)="realizarTurno(dia.numero,i)" [ngClass]="{'bg-slate-400 rounded-lg w-fit shadow-lg': i === marcarDia}">{{dia.numero}} </div>
+              <div class="grid col-start-2 text-xl ml-4 font-serif text-cyan-800 hover:cursor-pointer hover:bg-slate-200 hover:rounded-lg" *ngIf="dia.dia_num === 2" (click)="realizarTurno(dia.numero,i)" [ngClass]="{'bg-slate-400 rounded-lg w-fit shadow-lg': i === marcarDia}">{{dia.numero}} </div>
+              <div class="grid col-start-3 text-xl ml-4 font-serif text-cyan-800 hover:cursor-pointer hover:bg-slate-200 hover:rounded-lg" *ngIf="dia.dia_num === 3" (click)="realizarTurno(dia.numero,i)" [ngClass]="{'bg-slate-400 rounded-lg w-fit shadow-lg': i === marcarDia}">{{dia.numero}} </div>
+              <div class="grid col-start-4 text-xl ml-4 font-serif text-cyan-800 hover:cursor-pointer hover:bg-slate-200 hover:rounded-lg" *ngIf="dia.dia_num === 4" (click)="realizarTurno(dia.numero,i)" [ngClass]="{'bg-slate-400 rounded-lg w-fit shadow-lg': i === marcarDia}">{{dia.numero}} </div>
+              <div class="grid col-start-5 text-xl ml-4 font-serif text-cyan-800 hover:cursor-pointer hover:bg-slate-200 hover:rounded-lg" *ngIf="dia.dia_num === 5" (click)="realizarTurno(dia.numero,i)" [ngClass]="{'bg-slate-400 rounded-lg w-fit shadow-lg': i === marcarDia}">{{dia.numero}} </div>
+              <div class="grid col-start-6 text-xl ml-4 font-serif text-cyan-800 hover:cursor-pointer hover:bg-slate-200 hover:rounded-lg" *ngIf="dia.dia_num === 6" (click)="realizarTurno(dia.numero,i)" [ngClass]="{'bg-slate-400 rounded-lg w-fit shadow-lg': i === marcarDia}">{{dia.numero}} </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="" *ngIf="dia_seleccionado!='';then template_horario"></div>
+    </div>
+        
+    
+    
+  </ng-template>
+
+  <ng-template #template_horario>
+    <div class="flex flex-col h-fit w-1/2 ml-36 px-4">
+      <p class="text-center font-serif text-cyan-800 ">Seleccione Horario</p>
+      <div class="bg-slate-100 shadow-xl rounded-lg h-56 overflow-auto w-full p-4">
+        <ul class="flex flex-wrap gap-6 flex-col items-center h-full">
+          <li class="text-xl font-serif text-cyan-800 hover:cursor-pointer hover:bg-slate-200 hover:rounded-lg" *ngFor="let horario of horarios;let i = index" (click)="realizarTurno(horario,i)" [ngClass]="{'bg-slate-400 rounded-lg w-fit shadow-lg': i === marcarHora}">
+            {{horario}}
+          </li>
+        </ul>
+      </div>
+      <button  class="self-center mt-2 text-gray-200 rounded-full p-2 {{ horario_seleccionado != 'none' ?  'bg-cyan-600 hover:bg-cyan-800' : '' }}" [disabled]="horario_seleccionado == 'none'" (click)="confirmarTurno()">Confirmar</button>
+      
+    </div>
+  </ng-template>
+    <!-- Footer -->
+    <footer class="mt-auto w-full h-full">
+    </footer>
+  </div>
+</div>
+
+
+
