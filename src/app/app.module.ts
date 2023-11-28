@@ -2,20 +2,21 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { routing, appRoutingProviders } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { ServicesComponent } from './service/services.component';
 import { PlatformModule } from './platform/platform.module';
 import { SidebarModule } from "./sidebar/sidebar.module";
+import { LandingModule } from './landing/landing.module';
+import { CalendarioComponent } from './calendario/calendario.component';
 
 
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent,
         ServicesComponent,
+        CalendarioComponent,
     ],
     providers: [appRoutingProviders],
     bootstrap: [AppComponent],
@@ -26,7 +27,8 @@ import { SidebarModule } from "./sidebar/sidebar.module";
         FormsModule,
         PlatformModule,
         routing,
-        SidebarModule
+        SidebarModule,
+        LandingModule,
     ]
 })
 export class AppModule {}
