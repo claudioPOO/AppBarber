@@ -1,83 +1,83 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ClientService } from '../client/client.service';
 import { BarbersService } from '../barbers/barbers.service';
-import { Turno } from './turnos';
-import { TurnoService } from './turno.service';
+;
+import { TurnService } from './turn.service';
 import { CalendarioService } from '../service/calendario.service';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'solicitarTurno',
   templateUrl: 'solicitarTurno.html',
-  providers: [ClientService, BarbersService, TurnoService],
-  styleUrls: ['./turnos.css'],
+  providers: [ClientService, BarbersService, TurnService],
+  
 })
 export class TurnosComponent {
-  public horarios: Array<string> = [];
-  public cliente: any;
-  public barberos: Array<any> = [];
-  public barbero_seleccionado: Boolean = false;
-  public barbero: any;
-  public dia_seleccionado: any = '';
-  public horario_seleccionado: string = 'none';
-  public dias_semana: Array<any> = ['Lun', 'Mar', 'Mie', 'Juev', 'Vier', 'Sab'];
-  public diasDelMes: any[] = [];
-  public mesActual: any = '';
-  public marcarDia: number = -1;
-  public marcarHora: number = -1;
+  public schedules: Array<string> = [];
+  public client: any;
+  public barbers: Array<any> = [];
+  public selectedBarber: Boolean = false;
+  public barber: any;
+  public selectedDay: any = '';
+  public selectedSchedule: string = 'none';
+  public weekDays: Array<any> = ['Lun', 'Mar', 'Mie', 'Juev', 'Vier', 'Sab'];
+  public dayOfTheMonth: any[] = [];
+  public currentMonth: any = '';
+  public selectDay: number = -1;
+  public selectHour: number = -1;
   constructor(
     private clientService: ClientService,
     private barberService: BarbersService,
     private calendarioService: CalendarioService,
-    private turnoService: TurnoService
+    private turnService: TurnService
   ) {
     
   }
   ngOnInit() {
-    this.cliente = this.clientService.getClient(0);
-    this.barberos = this.barberService.getBarbers();
-    const fechaActual = new Date();
-    const anioActual = fechaActual.getFullYear();
-    this.mesActual = fechaActual.getMonth();
-    this.diasDelMes = this.calendarioService.obtenerDiasDelMes(
-      anioActual,
-      this.mesActual
+    this.client = this.clientService.getClient(0);
+    this.barbers = this.barberService.getBarbers();
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    this.currentMonth = currentDate.getMonth();
+    this.dayOfTheMonth = this.calendarioService.getDayOfTheMonth(
+      currentYear,
+      this.currentMonth
     );
-    const turnos = this.turnoService.getTurnos();
-    console.log(turnos);
+    const turns = this.turnService.getTurns();
+ 
   }
 
-  verCalendario(id_barbero: number) {
-    this.barbero_seleccionado = true;
-    this.barbero = this.barberService.getBarber(id_barbero - 1);
+  showCalendar(id_barber: number) {
+    this.selectedBarber = true;
+    this.barber = this.barberService.getBarber(id_barber - 1);
   }
-  realizarTurno(dato: any, i: number) {
+  setTurn(dato: any, index: number) {
     if (typeof dato == 'string') {
-      this.horario_seleccionado = dato;
-      this.marcarHora = i;
+      this.selectedSchedule = dato;
+      this.selectHour = index;
     } else {
-      this.dia_seleccionado = dato;
-      this.marcarDia = i;
-      // Logica de los horarios que ya tiene ese barbero el dia seleccionado para mostrar los horarios resultantes
-      this.verHorariosDisponibles(this.barbero, this.dia_seleccionado);
+      this.selectedDay = dato;
+      this.selectDay = index;
+      // Logica de los schedules que ya tiene ese barber el dia seleccionado para mostrar los schedules resultantes
+      this.seeSchedulesAvailables(this.barber, this.selectedDay);
     }
   }
-  confirmarTurno() {
+  confirmTurn() {
     Swal.fire({
       title: 'Turno Confirmado',
       html:
-        'Barbero: ' +
-        this.barbero.nombre +
+        'barber: ' +
+        this.barber.name +
         ' ' +
-        this.barbero.apellido +
+        this.barber.lastName +
         '<br>' +
         'Dia: ' +
-        this.dia_seleccionado +
+        this.selectedDay +
         '/' +
-        (this.mesActual + 1) +
+        (this.currentMonth + 1) +
         '<br>' +
         'Horario: ' +
-        this.horario_seleccionado,
+        this.selectedSchedule,
       showClass: {
         popup: 'animate__animated animate__fadeInDown',
       },
@@ -85,21 +85,22 @@ export class TurnosComponent {
         popup: 'animate__animated animate__fadeOutUp',
       },
     });
-    const turno = new Turno(
-      this.turnoService.getTurnos().length + 1,
-      this.barbero.id,
-      this.cliente.id_cliente,
-      this.dia_seleccionado,
-      this.horario_seleccionado
-    );
-    this.turnoService.addTurno(turno);
-    this.barbero_seleccionado = false;
-    this.dia_seleccionado = '';
-    this.marcarDia = -1;
-    this.marcarHora = -1;
+    const turn = {
+      idTurno:this.turnService.getTurns().length + 1,
+      idBarber:this.barber.id,
+      idClient:this.client.idClient,
+      day:this.selectedDay,
+      hour:this.selectedSchedule
+    }
+    
+    this.turnService.addTurno(turn);
+    this.selectedBarber = false;
+    this.selectedDay = '';
+    this.selectDay = -1;
+    this.selectHour = -1;
   }
-  verHorariosDisponibles(barbero: any, dia: number) {
-    this.horarios = [
+  seeSchedulesAvailables(barber: any, day: number) {
+    this.schedules = [
       '9:00hs',
       '9:30hs',
       '10:00hs',
@@ -117,13 +118,13 @@ export class TurnosComponent {
       '20:00hs',
     ];
 
-    if (this.turnoService.getTurnos().length > 0) {
-      const turnos = this.turnoService.getTurnos();
+    if (this.turnService.getTurns().length > 0) {
+      const turns = this.turnService.getTurns();
 
-      turnos.forEach((turno) => {
-        if (turno.id_barbero === barbero.id && turno.dia === dia) {
-          const indice = this.horarios.indexOf(turno.hora);
-          this.horarios.splice(indice, 1);
+      turns.forEach((turn) => {
+        if (turn.idBarber === barber.id && turn.day === day) {
+          const index = this.schedules.indexOf(turn.hour);
+          this.schedules.splice(index, 1);
         }
       });
     }

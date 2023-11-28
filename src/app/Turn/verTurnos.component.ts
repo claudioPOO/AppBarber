@@ -1,54 +1,52 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { BarbersService } from '../barbers/barbers.service';
-import { TurnoService } from './turno.service';
+import { TurnService } from './turn.service';
 
 @Component({
   selector: 'verTurnos',
   templateUrl: './verTurnos.html',
-  providers: [BarbersService, TurnoService],
+  providers: [BarbersService, TurnService],
 })
 export class VerTurnosComponent {
   public clienteId: number = 0;
-  public turnos: Array<any> = [];
-  public barberos: Array<any> = [];
-  public turnosCliente: Array<any> = [];
+  public turns: Array<any> = [];
+  public barbers: Array<any> = [];
+  public turnsClient: Array<any> = [];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private barberService: BarbersService,
-    private turnoService: TurnoService
+    private turnService: TurnService
   ) {}
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.clienteId = parseInt(params['idcliente']); // Obtiene el valor del parametro id cliente
     });
-    this.mostrar();
+    this.Show();
   }
-  mostrar() {
-    (this.barberos = this.barberService.getBarbers()),
-      (this.turnos = this.turnoService.getTurnos());
-    console.log(this.turnos);
-    console.log(this.clienteId);
-
-    this.turnos.forEach((turno) => {
-      if (turno.id_cliente == this.clienteId) {
-        this.barberos.forEach((barbero) => {
-          if (turno.id_barbero === barbero.id) {
-            const nuevoTurno = {
-              id_turno: turno.id_turno,
-              nombre_barbero: barbero.nombre + ' ' + barbero.apellido,
-              hora: turno.hora,
-              dia: turno.dia,
+  Show() {
+    this.barbers = this.barberService.getBarbers()
+    this.turns = this.turnService.getTurns()
+    console.log(this.turns)
+    this.turns.forEach((turn) => {
+      if (turn.idClient == this.clienteId) {
+        this.barbers.forEach((barber) => {
+          if (turn.idBarber === barber.id) {
+            const newTurn = {
+              idTurn: turn.idTurn,
+              nameBarber: barber.name + ' ' + barber.lastName,
+              hour: turn.hour,
+              day: turn.day,
             };
-            this.turnosCliente.push(nuevoTurno);
+            this.turnsClient.push(newTurn);
           }
         });
       }
     });
   }
-  cancelarTurno(id: number) {
-    this.turnoService.deleteTurno(id);
+  cancelTurn(id: number) {
+    this.turnService.deleteTurn(id);
     let currentUrl = this.router.url;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';

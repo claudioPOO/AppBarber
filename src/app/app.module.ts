@@ -9,14 +9,13 @@ import { ServicesComponent } from './service/services.component';
 import { PlatformModule } from './platform/platform.module';
 import { SidebarModule } from "./sidebar/sidebar.module";
 import { LandingModule } from './landing/landing.module';
-import { CalendarioComponent } from './calendario/calendario.component';
+
 
 
 @NgModule({
     declarations: [
         AppComponent,
         ServicesComponent,
-        CalendarioComponent,
     ],
     providers: [appRoutingProviders],
     bootstrap: [AppComponent],

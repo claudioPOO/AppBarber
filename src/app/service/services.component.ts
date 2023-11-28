@@ -4,7 +4,6 @@ import { ServicesService } from "./servicios.service";
     selector:"services",
     templateUrl: "services.component.html",    
     providers:[ServicesService],
-    styleUrls: ['../turn/turnos.css'],
 })
 
 export class ServicesComponent{

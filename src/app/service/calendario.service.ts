@@ -5,26 +5,26 @@ import { Injectable } from '@angular/core';
 })
 export class CalendarioService {
 
-  obtenerDiasDelMes(anio: number, mes: number): any[] {
-    const primerDiaDelMes = new Date(anio, mes, 1);
-    const ultimoDiaDelMes = new Date(anio, mes + 1, 0);
-    const fechaActual = new Date();
-    const diasDelMes = [];
-    for (let i = primerDiaDelMes.getDate(); i <= ultimoDiaDelMes.getDate(); i++) {
-      const fecha = new Date(anio, mes, i);
-      if (fecha >= fechaActual && fecha.getDay() !== 0) { // Filtra los domingos y días anteriores a la fecha actual
-        diasDelMes.push({
-          numero: fecha.getDate(),
-          dia_num:fecha.getDay()});
+  getDayOfTheMonth(year: number, month: number): any[] {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const currentDate = new Date();
+    const weekDays = [];
+    for (let index = firstDay.getDate(); index <= lastDay.getDate(); index++) {
+      const date = new Date(year, month, index);
+      if (date >= currentDate && date.getDay() !== 0) { // Filtra los domingos y días anteriores a la fecha actual
+        weekDays.push({
+          num: date.getDate(),
+          numDay:date.getDay()});
       
           
       }
     }
-    return diasDelMes;
+    return weekDays;
   }
 
-  obtenerNombreDia(dia: number): string {
-    const nombresDias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    return nombresDias[dia];
+  getNameDay(day: number): string {
+    const nameDays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    return nameDays[day];
   }
 }
